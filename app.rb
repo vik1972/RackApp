@@ -8,6 +8,7 @@ class App
     if request.get?
       route_request(request)
     end
+
   end
 
   private
@@ -17,25 +18,25 @@ class App
     when '/time'
       time_format_response(request)
     else
-      not_found_response
+      response(404, '404 Not Found')
     end
   end
 
   def time_format_response(request)
-    time_format = TimeFormat.new(request.params['format'])
+    time_format = TimeFormatter.new(request.params['format'])
 
     if time_format.valid?
-      response(status:200, body: time_format.result)
+      response(200, time_format.good_result)
     else
-      response(status: 400, body: time_format.result)
+      response(400, time_format.bad_result)
     end
   end
 
-  def response(status:, headers: { 'Content-Type' => 'text/plain' }, body:)
-    [status, headers, [body]]
+  def headers
+    { 'Content-Type' => 'text/plain' }
   end
 
-  def not_found_response
-    response(status: 404, body: '404 Not Found')
+  def response(status, body)
+    Rack::Response.new(body, status, headers).finish   
   end
 end
