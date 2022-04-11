@@ -5,7 +5,6 @@ class TimeFormatter
 
   def initialize(params)
     @params = params
-    call
   end
 
   def call

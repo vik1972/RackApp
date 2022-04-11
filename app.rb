@@ -24,6 +24,7 @@ class App
 
   def time_format_response(request)
     time_format = TimeFormatter.new(request.params['format'])
+    time_format.call
 
     if time_format.valid?
       response(200, time_format.good_result)
