@@ -5,14 +5,19 @@ class TimeFormatter
 
   def initialize(params)
     @params = params
+    @good_params = []
+    @bad_params = []
   end
 
   def call
-    check_time_formats
-  end
-
-  def good_result
-      converted_time_format
+    all_params   = @params.split(',')
+    all_params.each do |key|
+      if TIME_FORMATS.key?(key.to_sym)
+        @good_params << TIME_FORMATS[key.to_sym]
+      else
+        @bad_params << key
+      end
+    end
   end
 
   def bad_result
@@ -23,24 +28,8 @@ class TimeFormatter
     @bad_params.empty?
   end
 
-  private
-
-  def check_time_formats
-    all_params   = @params.split(',')
-    @good_params = []
-    @bad_params = []
-    all_params.each do |key|
-      if TIME_FORMATS.key?(key.to_sym)
-        @good_params << TIME_FORMATS[key.to_sym]
-      else
-        @bad_params << key
-      end
-    end
-  end
-
   def converted_time_format
     format = @good_params.join("-")
     Time.now.strftime(format)
   end
-
 end

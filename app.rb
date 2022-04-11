@@ -8,7 +8,6 @@ class App
     if request.get?
       route_request(request)
     end
-
   end
 
   private
@@ -27,7 +26,7 @@ class App
     time_format.call
 
     if time_format.valid?
-      response(200, time_format.good_result)
+      response(200, time_format.converted_time_format)
     else
       response(400, time_format.bad_result)
     end
